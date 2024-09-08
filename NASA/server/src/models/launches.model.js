@@ -1,16 +1,11 @@
+const { initialLaunches } = require("./initital");
+
 const launches = new Map();
 let latestFlightNumber = 100;
-const launch = {
-  flightNumber: 100,
-  mission: "Kepler Exploration X",
-  rocket: "Explorer IS1",
-  launchDate: new Date(Date.now() + 15000000000),
-  target: "Kepler-442 B",
-  customers: ["Nasa"],
-  upcoming: true,
-  success: true,
-};
-launches.set(launch.flightNumber, launch);
+
+initialLaunches.forEach((l) => {
+  launches.set(l.flightNumber, l);
+});
 const getAllLaunches = () => {
   return Array.from(launches.values());
 };
@@ -26,7 +21,18 @@ const addLaunch = (payload) => {
   launches.set(latestFlightNumber, newLaunch);
   return newLaunch;
 };
+const removeLaunch = (id) => {
+  const launch = launches.get(+id);
+  if (launch) {
+    launch.upcoming = false;
+    launch.success = false;
+    return launch;
+  } else {
+    return false;
+  }
+};
 module.exports = {
   getAllLaunches,
   addLaunch,
+  removeLaunch,
 };
