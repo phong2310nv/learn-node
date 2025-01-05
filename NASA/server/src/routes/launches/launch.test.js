@@ -9,16 +9,16 @@ describe("Launch API", () => {
   afterAll(async () => {
     await mongoDisconnect();
   });
-  describe("Test the GET /launches", () => {
+  describe("Test the GET /v1/launches", () => {
     test("It should return 200", async () => {
       const res = await request(app)
-        .get("/launches")
+        .get("/v1/launches")
         .expect("Content-Type", /json/)
         .expect(200);
     });
   });
 
-  describe("Test the POST /launches", () => {
+  describe("Test the POST /v1/launches", () => {
     const completeLaunchData = {
       mission: "AAAAA",
       rocket: "Rocket YYY",
@@ -38,7 +38,7 @@ describe("Launch API", () => {
     };
     test("It should return 201", async () => {
       const res = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(completeLaunchData)
         .expect("Content-Type", /json/)
         .expect(201);
@@ -49,7 +49,7 @@ describe("Launch API", () => {
     });
     test("It should catch missing required properties", async () => {
       const res = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(completeLaunchDataWithNoDate)
         .expect("Content-Type", /json/)
         .expect(400);
@@ -57,7 +57,7 @@ describe("Launch API", () => {
     });
     test("It should catch invalid date", async () => {
       const res = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(completeLaunchDataWithInvalidDate)
         .expect("Content-Type", /json/)
         .expect(400);
