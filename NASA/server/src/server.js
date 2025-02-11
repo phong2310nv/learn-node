@@ -14,6 +14,7 @@ async function startServer() {
   await loadLaunchData();
   server.listen(PORT, () => {
     console.log(`Listing on port ${PORT}`);
+    console.log(`Test ENV: ${process.env.TEST_ENV}`);
   });
 }
 startServer();
