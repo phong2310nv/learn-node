@@ -3,11 +3,39 @@ version: '3'
 services:
   server:
     build: ./server
-    ports:
-      - "8000:3000"
+    # ports:
+    #   - "8000:3000"
+    networks:
+      - nasa-app
     environment:
       - TEST_ENV=xxxxxxxxxxxxxx
   client:
-    build: ./client
+    build:
+      context: ./client
+      # target: 
+      args:
+        REACT_APP_API_BASE: http://127.0.0.1/api/v1
+    # ports:
+    #   - "5000:80"
+    env_file: ./client/.env
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    networks:
+      - nasa-app
+    depends_on:
+      - server
+  nginx-server:
+    build:
+      context: ./nginx
     ports:
-      - "5000:80"
+      - 80:80
+      - 443:443
+    networks:
+      - nasa-app
+    depends_on:
+      - server
+      - client
+networks:
+  nasa-app:
+    driver: bridge

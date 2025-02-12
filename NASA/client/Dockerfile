@@ -13,11 +13,14 @@ RUN npm install
 # Copy the rest of the app
 COPY . .
 
+ARG REACT_APP_API_BASE
+
 # Build the React app
-RUN npm run build
+RUN REACT_APP_API_BASE=${REACT_APP_API_BASE} npm run build
 
 # Use an Nginx image to serve the React app
 FROM nginx:stable-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 
 # Expose port 80 for the React app
