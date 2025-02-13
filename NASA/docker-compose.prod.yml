@@ -7,8 +7,6 @@ services:
     #   - "8000:3000"
     networks:
       - nasa-app
-    # environment:
-    #   - TEST_ENV=xxxxxxxxxxxxxx
   client:
     build:
       context: ./client
@@ -18,9 +16,9 @@ services:
     # ports:
     #   - "5000:80"
     env_file: ./.env
-    volumes:
-      - ./client:/app
-      - /app/node_modules
+    # volumes:
+    #   - ./client:/app
+    #   - /app/node_modules
     networks:
       - nasa-app
     depends_on:
@@ -30,7 +28,7 @@ services:
       context: ./nginx
       args:
         APP_DOMAIN: ${APP_DOMAIN}
-        NODE_ENV: development
+        NODE_ENV: production  
     env_file: ./.env
     ports:
       - 80:80
@@ -38,10 +36,21 @@ services:
     networks:
       - nasa-app
     volumes:
-      - ./nginx/default.conf.template.dev:/etc/nginx/templates/default.conf.template
+      - certbot-etc:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
     depends_on:
       - server
       - client
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $!; certbot renew --webroot -w /var/www/certbot --quiet; done'"
 networks:
   nasa-app:
     driver: bridge
+volumes:
+  certbot-etc:
+  certbot-www:
