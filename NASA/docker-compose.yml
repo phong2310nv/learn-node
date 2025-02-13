@@ -1,12 +1,23 @@
 services:
+  mongo:
+    image: mongo:latest
+    container_name: nasa-mongo-db
+    ports:
+      - "27017:27017"
+    networks:
+      - nasa-network
+    volumes:
+      - mongo-data:/data/db
   server:
     build: ./server
     # ports:
     #   - "8000:3000"
     networks:
-      - nasa-app
-    # environment:
-    #   - TEST_ENV=xxxxxxxxxxxxxx
+      - nasa-network
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/nasa
+    depends_on:
+      - mongo
   client:
     build:
       context: ./client
@@ -20,7 +31,7 @@ services:
       - ./client:/app
       - /app/node_modules
     networks:
-      - nasa-app
+      - nasa-network
     depends_on:
       - server
   nginx-server:
@@ -34,12 +45,14 @@ services:
       - 80:80
       - 443:443
     networks:
-      - nasa-app
+      - nasa-network
     volumes:
       - ./nginx/default.conf.template.dev:/etc/nginx/templates/default.conf.template
     depends_on:
       - server
       - client
 networks:
-  nasa-app:
+  nasa-network:
     driver: bridge
+volumes:
+  mongo-data:
