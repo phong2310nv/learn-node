@@ -17,19 +17,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '18'
-      - name: Get in the NASA Project directory
-        run: cd NASA
-      - name: Install client packages
+      - name: Install client packages and build
+        working-directory: ./NASA/client
         run: |
-          ls -la
-          cd client
           npm install
-          cd ..
-          ls -la
-      - name: Build
-        run: npm run build --prefix client
-      - name: Test
-        run: npm test
+          npm run build
+      - name: Test server
+        working-directory: ./NASA
+        run: npm run test
       - name: Deploy
         run: |
           echo "Deploying to production..."
