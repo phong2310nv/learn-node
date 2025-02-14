@@ -23,8 +23,10 @@ jobs:
           npm install
           npm run build
       - name: Test server
-        working-directory: ./NASA
-        run: npm run test
+        working-directory: ./NASA/server
+        run: |
+          npm install
+          npm run test
       - name: Deploy
         run: |
           echo "Deploying to production..."
