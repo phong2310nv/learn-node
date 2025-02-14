@@ -21,9 +21,11 @@ jobs:
         run: cd NASA
       - name: Install client packages
         run: |
+          ls -la
           cd client
           npm install
           cd ..
+          ls -la
       - name: Build
         run: npm run build --prefix client
       - name: Test
