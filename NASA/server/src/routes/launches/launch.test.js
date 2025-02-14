@@ -13,6 +13,7 @@ describe("Launch API", () => {
   });
   afterAll(async () => {
     await mongoDisconnect();
+    await redisClient.disconnect();
   });
   describe("Test the GET /api/v1/launches", () => {
     test("It should return 200", async () => {
