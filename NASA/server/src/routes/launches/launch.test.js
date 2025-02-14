@@ -2,11 +2,14 @@ const request = require("supertest");
 const app = require("../../app");
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
 const { loadPlanetsData } = require('../../models/planet.model');
+const { redisClient } = require('../../services/redis');
 
 describe("Launch API", () => {
   beforeAll(async () => {
     await mongoConnect();
+    await redisClient.connect();
     await loadPlanetsData();
+
   });
   afterAll(async () => {
     await mongoDisconnect();
