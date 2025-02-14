@@ -8,8 +8,8 @@
     "client": "npm start --prefix client",
     "watch": "concurrently  \"npm run server\"  \"npm run client\"",
     "test": "npm run test --prefix server",
-    "deploy": "npm run build --prefix client && npm start --prefix server",
-    "deploy-cluster": "npm run build --prefix client && npm run cluster --prefix server"
+    "deploy": "npm run build-local --prefix client && npm start --prefix server",
+    "deploy-cluster": "npm run build-local --prefix client && npm run cluster --prefix server"
   },
   "keywords": [],
   "author": "",
