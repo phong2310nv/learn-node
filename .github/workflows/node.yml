@@ -19,8 +19,11 @@ jobs:
           node-version: '18'
       - name: Get in the NASA Project directory
         run: cd NASA
-      - name: Install dependencies
-        run: npm install
+      - name: Install client packages
+        run: |
+          cd client
+          npm install
+          cd ..
       - name: Build
         run: npm run build --prefix client
       - name: Test
