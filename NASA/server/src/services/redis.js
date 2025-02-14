@@ -1,4 +1,7 @@
 const redis = require("redis");
+console.log( `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`);
+console.log(process.env.MONGO_URL);
+
 
 const client = redis.createClient({
   url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
