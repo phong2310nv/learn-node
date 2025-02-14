@@ -1,4 +1,13 @@
 services:
+  redis:
+    container_name: nasa-redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - nasa-network
   mongo:
     image: mongo:latest
     container_name: nasa-mongo-db
@@ -16,8 +25,11 @@ services:
       - nasa-network
     environment:
       - MONGO_URL=mongodb://mongo:27017/nasa
+      - REDIS_PORT=6379
+      - REDIS_HOST=nasa-redis
     depends_on:
       - mongo
+      - redis
   client:
     build:
       context: ./client
@@ -39,7 +51,7 @@ services:
       context: ./nginx
       args:
         APP_DOMAIN: ${APP_DOMAIN}
-        NODE_ENV: production  
+        NODE_ENV: production
     env_file: ./.env
     ports:
       - 80:80
@@ -66,3 +78,4 @@ volumes:
   certbot-etc:
   certbot-www:
   mongo-data:
+  redis-data:

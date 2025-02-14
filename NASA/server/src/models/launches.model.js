@@ -24,6 +24,7 @@ async function getLatestFlightNumber(params) {
 }
 
 const getAllLaunches = async (skip, limit) => {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return await launches
     .find({}, { _id: 0 })
     .sort({ flightNumber: 1 })
