@@ -18,8 +18,9 @@ jobs:
         with:
           node-version: '18'
       - name: Install dependencies
-        run: cd NASA
-        run: npm install
+        run: 
+        - cd NASA
+        - npm install
       - name: Build
         run: npm run build --prefix client
       - name: Test
