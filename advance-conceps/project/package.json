@@ -1,0 +1,33 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --watch index.js",
+    "server": "node --watch index.js --ignore tests",
+    "client": "pnpm --dir client run start",
+    "dev": "concurrently \"pnpm start\" \"pnpm run client\"",
+    "build": "NPM_CONFIG_PRODUCTION=false pnpm --dir client install  && pnpm --dir client run build ",
+    "heroku-postbuild": "npm run build",
+    "install-all": "pnpm install && pnpm --dir client install "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "2.1692.0",
+    "body-parser": "1.20.3",
+    "concurrently": "9.1.2",
+    "cookie-session": "2.1.0",
+    "express": "4.21.2",
+    "jest": "23.6.0",
+    "migrate-mongoose": "4.0.0",
+    "mongoose": "8.11.0",
+    "passport": "0.7.0",
+    "passport-google-oauth20": "2.0.0",
+    "path-parser": "6.1.0",
+    "puppeteer": "24.3.0",
+    "redis": "4.7.0",
+    "uuid": "11.1.0"
+  }
+}
