@@ -11,6 +11,8 @@ describe("Test the website", () => {
     await mongoose.disconnect();
   });
   beforeEach(async () => {
+    console.log("beforeEachTest");
+
     page = await CustomPage.build();
     await page.goto("http://localhost:3000");
   });
@@ -52,7 +54,9 @@ describe("Test the website", () => {
         // await page.type(".content input", "My Content");
         // await page.click("form button[type='submit']");
         // const text = await page.getContentsOf("#root > div > div > nav > div > a");
-        expect("Please confirm your entries").toEqual("Please confirm your entries");
+        expect("Please confirm your entries").toEqual(
+          "Please confirm your entries"
+        );
       });
       // test("Submitting and then saving adds blog to index page", async () => {
       //   await page.click("button.green");

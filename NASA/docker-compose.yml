@@ -18,9 +18,13 @@ services:
     volumes:
       - mongo-data:/data/db
   server:
-    build: ./server
+    build: 
+      context: ./server
+      # target: 
+      args:
+        PORT: ${API_PORT}
     # ports:
-    #   - "8000:3000"
+    #   - "8000:${API_PORT}"
     networks:
       - nasa-network
     volumes:
