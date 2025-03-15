@@ -6,10 +6,9 @@ WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
-COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN pnpm install
 
 # Copy the rest of the app
 COPY . .
@@ -17,7 +16,7 @@ COPY . .
 ARG REACT_APP_API_BASE
 
 # Build the React app
-RUN REACT_APP_API_BASE=${REACT_APP_API_BASE} npm run build
+RUN REACT_APP_API_BASE=${REACT_APP_API_BASE} pnpm run build
 
 # Use an Nginx image to serve the React app
 FROM nginx:stable-alpine

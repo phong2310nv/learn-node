@@ -5,4 +5,6 @@ module.exports = {
   mongoURI:
     "mongodb+srv://common-user:LJcwzGdNuw39OgGQ@learnnode.qioivt5.mongodb.net/node-advance?retryWrites=true&w=majority&appName=nodeAdvance",
   cookieKey: "123123123",
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
 };
