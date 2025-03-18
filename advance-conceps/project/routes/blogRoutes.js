@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const requireLogin = require("../middlewares/requireLogin");
 const cleanCache = require("../middlewares/cleanCache");
+const { getPresignedUrl } = require("../services/aws");
 const Blog = mongoose.model("Blog");
 
 module.exports = (app) => {
@@ -10,8 +11,13 @@ module.exports = (app) => {
       _id: req.params.id,
     });
     console.log(blog);
-
-    res.send(blog);
+    const processedBlog = {
+      ...blog.toObject(),
+      imageUrl: blog.imageUrl
+        ? await getPresignedUrl(blog.imageUrl, "GET")
+        : null,
+    };
+    res.send(processedBlog);
   });
 
   app.get("/api/blogs", requireLogin, async (req, res) => {
@@ -23,11 +29,12 @@ module.exports = (app) => {
   });
 
   app.post("/api/blogs", requireLogin, cleanCache, async (req, res) => {
-    const { title, content } = req.body;
+    const { title, content, imageUrl } = req.body;
 
     const blog = new Blog({
       title,
       content,
+      imageUrl,
       _user: req.user.id,
     });
 
