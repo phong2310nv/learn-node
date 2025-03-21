@@ -8,7 +8,7 @@
     "plugin:prettier/recommended",
     "plugin:node/recommended"
   ],
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "node"],
   "rules": {
     "prettier/prettier": "error",
     "spaced-comment": "off",
@@ -23,5 +23,6 @@
     "class-methods-use-this": "off",
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val|err" }]
-  }
+  },
+  "ignorePatterns": ["node_modules/", "dist/", "coverage/"]
 }
