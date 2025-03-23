@@ -4,13 +4,14 @@
     "es2021": true
   },
   "extends": [
+    "prettier",
     "eslint:recommended",
     "plugin:prettier/recommended",
     "plugin:node/recommended"
   ],
   "plugins": ["prettier", "node"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",

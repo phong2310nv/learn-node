@@ -25,6 +25,9 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
+app.get('/ping', (req, res) => {
+  res.status(200).json({ message: 'Pong', app: 'Natours' });
+});
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
