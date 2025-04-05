@@ -9,7 +9,8 @@
     "remove-data": "node dev-data/import-dev-data.js --delete",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "debug": "ndb server.js"
   },
   "author": "Jonas Schmedtmann",
   "license": "ISC",

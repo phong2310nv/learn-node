@@ -1,16 +1,4 @@
 {
   "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Debug Jest Tests in app1",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/advance-conceps/project",
-      "program": "${workspaceFolder}/advance-conceps/project/node_modules/jest/bin/jest",
-      "args": ["--runInBand"],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true
-    }
-  ]
+  "configurations": []
 }
