@@ -43,6 +43,14 @@ function handleValidationErrorDB(err) {
   return new AppError(message, 400);
 }
 
+function handleJWTError(err) {
+  return new AppError('Invalid token. Please login again', 400);
+}
+
+function handleJWTExpiredError(err) {
+  return new AppError('Your token has expired! Please log in again', 400);
+}
+
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -53,17 +61,18 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
     // Cast error: eg. invalid ID
-    if (err.name === 'CastError') {
-      error = handleCastErrorDB(err);
-    }
+    if (err.name === 'CastError') error = handleCastErrorDB(err);
+
     // Handle Mongoose duplicate key error
-    if (err.code === 11000) {
-      error = handleDuplicateFieldsDB(err);
-    }
+    if (err.code === 11000) error = handleDuplicateFieldsDB(err);
+
     // Handle Mongoose validation error
-    if (err.name === 'ValidationError') {
-      error = handleValidationErrorDB(err);
-    }
+    if (err.name === 'ValidationError') error = handleValidationErrorDB(err);
+
+    if (err.name === 'JsonWebTokenError') error = handleJWTError(err);
+
+    if (err.name === 'TokenExpiredError') error = handleJWTExpiredError(err);
+
     sendErrorForProd(error, res);
   }
 };
