@@ -15,13 +15,13 @@ router
 
 router
   .route('/')
-  .get(authController.protect, tourController.getAllTours)
+  .get(authController.protected(), tourController.getAllTours)
   .post(tourController.createTour);
 
 router
   .route('/:id')
   .get(tourController.getTour)
   .put(tourController.updateTour)
-  .delete(tourController.deleteTour);
+  .delete(authController.protected('admin'), tourController.deleteTour);
 
 module.exports = router;
