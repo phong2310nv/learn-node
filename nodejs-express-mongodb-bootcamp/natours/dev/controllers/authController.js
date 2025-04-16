@@ -8,6 +8,15 @@ const crypto = require('crypto');
 
 const createSendToken = (user, statusCode, res, withUser = false) => {
   const token = signToken(user._id);
+  const cookieOptions = {
+    expires: new Date().setDate(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+    ),
+    httpOnly: true,
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; // Serve secure cookies
+  if (process.env.NODE_ENV === 'development') cookieOptions.secure = false; // Serve secure cookies in development
+  res.cookie('jwt', token, cookieOptions);
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -33,11 +42,14 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
+  newUser.password = undefined; // Remove password from the response
+
   createSendToken(newUser, 201, res, true);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
+
   // Check if email and password exist
   if (!email || !password) {
     return next(new AppError('Please provide email and password!', 400));
@@ -48,7 +60,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
   // If everything ok, send token to client
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, res, true);
 });
 
 exports.protected = (...roles) => {
