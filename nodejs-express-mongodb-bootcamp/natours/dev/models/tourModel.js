@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+// const User = require('./userModel');
 // const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
@@ -73,16 +74,68 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    toJSON: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        delete ret.__v;
+        delete ret._id;
+        return ret;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        delete ret.__v;
+        delete ret._id;
+        return ret;
+      },
+    },
   },
 );
 
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
+});
+
+// Virtual populate
+// This is a way to populate data from another collection without storing the reference in the current document
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
 });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
@@ -91,6 +144,12 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
+// tourSchema.pre('save', async function (next) {
+//   const guilds = this.guides.map(async (id) => await User.findById(id));
+//   this.guides = await Promise.all(guilds);
+//   next();
+// });
+
 // tourSchema.post('save', function (next) {
 //   console.log('Document saved');
 //   next();
@@ -98,6 +157,14 @@ tourSchema.pre('save', function (next) {
 
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
+  next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
   next();
 });
 

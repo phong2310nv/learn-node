@@ -48,7 +48,29 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+        delete ret._id;
+        return ret;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+        delete ret._id;
+        return ret;
+      },
+    },
+  },
 );
 
 userSchema.pre('save', async function (next) {
