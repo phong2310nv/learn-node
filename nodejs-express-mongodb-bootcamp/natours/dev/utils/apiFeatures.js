@@ -15,8 +15,8 @@ class APIFeature {
       /\b(gte|gt|lte|lt|regex)\b/g,
       (match) => `$${match}`,
     );
-    console.log(queryStr);
 
+    // this.query = this.query.find(JSON.parse(queryStr)).explain();
     this.query = this.query.find(JSON.parse(queryStr));
 
     return this;
